@@ -6,7 +6,6 @@ focusNameField();
 
 // The "Job Role" section
 function selectOtherJob() {
-    const fieldset = document.querySelector(".basic-info");
     const select = document.querySelector("#title");
     const input = document.querySelector("#other-job-role");
 
