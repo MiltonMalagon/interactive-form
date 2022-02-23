@@ -1,1 +1,5 @@
-console.log("Test");
+function focusNameField() {
+    document.getElementById("name").focus();
+}
+
+focusNameField();
