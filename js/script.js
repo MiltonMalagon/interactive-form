@@ -34,22 +34,9 @@ function selectTShirtColor() {
 
         colorMenu.disabled = false;
         
-        if (value === "js puns") {
+        if (value === "js puns" || value === "heart js") {
             firstOption.selected = true;
 
-            for (let i = 0; i < colorOptions.length; i++) {
-                let dataset = colorOptions[i].dataset.theme;
-                
-                if (dataset !== value) {
-                    colorOptions[i].hidden = true;
-                } else {
-                    colorOptions[i].hidden = false;
-                }
-            }
-        }
-        if (value === "heart js") {
-            firstOption.selected = true;
-            
             for (let i = 0; i < colorOptions.length; i++) {
                 let dataset = colorOptions[i].dataset.theme;
                 
