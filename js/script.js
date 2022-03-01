@@ -24,34 +24,39 @@ selectOtherJob();
 function selectTShirtColor() {
     const designMenu = document.querySelector("#design");
     const colorMenu = document.querySelector("#color");
-    const colorOptions = document.querySelectorAll("option[data-theme]");
+    const colorOptions = colorMenu.querySelectorAll("option[data-theme]");
 
     colorMenu.disabled = true;
     
     designMenu.addEventListener("change", (e) => {
-        colorMenu.disabled = false;
-
         let value = e.target.value;
+        let firstOption = colorMenu.firstElementChild;
+
+        colorMenu.disabled = false;
         
         if (value === "js puns") {
+            firstOption.selected = true;
+
             for (let i = 0; i < colorOptions.length; i++) {
                 let dataset = colorOptions[i].dataset.theme;
                 
                 if (dataset !== value) {
-                    colorOptions[i].style.display = "none";
+                    colorOptions[i].hidden = true;
                 } else {
-                    colorOptions[i].style.display = "block";
+                    colorOptions[i].hidden = false;
                 }
             }
         }
         if (value === "heart js") {
+            firstOption.selected = true;
+            
             for (let i = 0; i < colorOptions.length; i++) {
                 let dataset = colorOptions[i].dataset.theme;
                 
                 if (dataset !== value) {
-                    colorOptions[i].style.display = "none";
+                    colorOptions[i].hidden = true;
                 } else {
-                    colorOptions[i].style.display = "block";
+                    colorOptions[i].hidden = false;
                 }
             }
         }
