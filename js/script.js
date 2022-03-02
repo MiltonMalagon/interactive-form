@@ -53,19 +53,22 @@ selectTShirtColor();
 
 // "Register for Activities" section
 function sumActivitiesCost() {
-    const activities = document.querySelector("#activities"); // fieldset element
+    const activities = document.querySelector("#activities");
+    const activitiesCost = document.querySelector("#activities-cost");
+    const txtTotal = activitiesCost.textContent;
+    const regex = /\d+/;
     let total = 0;
-    
+
     activities.addEventListener("change", (e) => {
         let cost = +e.target.getAttribute("data-cost");
 
         if (e.target.checked) {
             total += cost;
-            console.log(total);
         } else {
             total -= cost;
-            console.log(total);
         }
+        
+        activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
     });
 }
 sumActivitiesCost();
