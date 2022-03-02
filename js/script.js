@@ -38,9 +38,9 @@ function selectTShirtColor() {
             firstOption.selected = true;
 
             for (let i = 0; i < colorOptions.length; i++) {
-                let dataset = colorOptions[i].dataset.theme;
+                let theme = colorOptions[i].getAttribute("data-theme");
                 
-                if (dataset !== value) {
+                if (theme !== value) {
                     colorOptions[i].hidden = true;
                 } else {
                     colorOptions[i].hidden = false;
@@ -50,3 +50,22 @@ function selectTShirtColor() {
     });
 }
 selectTShirtColor();
+
+// "Register for Activities" section
+function sumActivitiesCost() {
+    const activities = document.querySelector("#activities"); // fieldset element
+    let total = 0;
+    
+    activities.addEventListener("change", (e) => {
+        let cost = +e.target.getAttribute("data-cost");
+
+        if (e.target.checked) {
+            total += cost;
+            console.log(total);
+        } else {
+            total -= cost;
+            console.log(total);
+        }
+    });
+}
+sumActivitiesCost();
