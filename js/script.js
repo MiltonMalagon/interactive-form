@@ -10,7 +10,7 @@ function selectOtherJob() {
     const jobInput = document.querySelector("#other-job-role");
 
     jobInput.style.display = "none";
-    jobMenu.addEventListener("change", (e) => {
+    jobMenu.addEventListener("change", e => {
         if (e.target.value === "other") {
             jobInput.style.display = "block"
         } else {
@@ -28,7 +28,7 @@ function selectTShirtColor() {
 
     colorMenu.disabled = true;
     
-    designMenu.addEventListener("change", (e) => {
+    designMenu.addEventListener("change", e => {
         let value = e.target.value;
         let firstOption = colorMenu.firstElementChild;
 
@@ -59,7 +59,7 @@ function sumActivitiesCost() {
     const regex = /\d+/;
     let total = 0;
 
-    activities.addEventListener("change", (e) => {
+    activities.addEventListener("change", e => {
         let cost = +e.target.getAttribute("data-cost");
 
         if (e.target.checked) {
@@ -67,8 +67,40 @@ function sumActivitiesCost() {
         } else {
             total -= cost;
         }
-        
         activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
     });
 }
 sumActivitiesCost();
+
+// "Payment Info" section
+function selectPayment() {
+    const paymentMenu = document.querySelector("#payment"); // select element;
+    const paymentOptions = document.querySelectorAll("#payment option"); // option elements
+    const paymentField = document.querySelector(".payment-methods"); // fieldset element
+    const paymentBoxes = paymentField.children;
+
+    for (let i = 0; i < paymentOptions.length; i++) {
+        let attribute = paymentOptions[i].getAttribute("value");
+
+        if (attribute === "credit-card") {
+            paymentOptions[i].selected = true;
+        } else {
+            paymentOptions[i].selected = false;
+        }
+    }
+
+    for (let i = 2; i < paymentBoxes.length; i++) {
+        let attribute = paymentBoxes[i].getAttribute("id");
+        
+        if (attribute !== "credit-card") {
+            paymentBoxes[i].hidden = true;
+        } else {
+            paymentBoxes[i].hidden = false;
+        }
+    }
+
+    // paymentMenu.addEventListener("change", e => {
+        
+    // });
+}
+selectPayment();
