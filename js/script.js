@@ -87,17 +87,27 @@ function selectPayment() {
         } else {
             paymentOptions[i].selected = false;
         }
-    }
-
-    for (let i = 2; i < paymentBoxes.length; i++) {
-        let attribute = paymentBoxes[i].getAttribute("id");
         
-        if (attribute !== "credit-card") {
-            paymentBoxes[i].hidden = true;
-        } else {
-            paymentBoxes[i].hidden = false;
+        for (let j = 2; j < paymentBoxes.length; j++) {
+            let attribute = paymentBoxes[j].getAttribute("id");
+            
+            if (attribute !== "credit-card") {
+                paymentBoxes[j].hidden = true;
+            } else {
+                paymentBoxes[j].hidden = false;
+            }
         }
     }
+
+    // for (let i = 2; i < paymentBoxes.length; i++) {
+    //     let attribute = paymentBoxes[i].getAttribute("id");
+        
+    //     if (attribute !== "credit-card") {
+    //         paymentBoxes[i].hidden = true;
+    //     } else {
+    //         paymentBoxes[i].hidden = false;
+    //     }
+    // }
 
     // paymentMenu.addEventListener("change", e => {
         
