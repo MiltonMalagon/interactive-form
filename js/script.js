@@ -99,18 +99,18 @@ function selectPayment() {
         }
     }
 
-    // for (let i = 2; i < paymentBoxes.length; i++) {
-    //     let attribute = paymentBoxes[i].getAttribute("id");
-        
-    //     if (attribute !== "credit-card") {
-    //         paymentBoxes[i].hidden = true;
-    //     } else {
-    //         paymentBoxes[i].hidden = false;
-    //     }
-    // }
+    paymentMenu.addEventListener("change", e => {
+        let option = e.target.value;
 
-    // paymentMenu.addEventListener("change", e => {
-        
-    // });
+        for (let i = 2; i < paymentBoxes.length; i++) {
+            let attribute = paymentBoxes[i].getAttribute("id");
+
+            if (option === attribute) {
+                paymentBoxes[i].hidden = false;
+            } else {
+                paymentBoxes[i].hidden = true;
+            }
+        }
+    });
 }
 selectPayment();
