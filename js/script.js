@@ -133,7 +133,7 @@ function formValidation() {
     }
     const activitiesValidation = () => {
         let activityValue = activitiesCost.textContent;
-        const activityIsValid = /\d+/.test(activityValue);
+        const activityIsValid = /\d{3}/.test(activityValue);
 
         return activityIsValid;
     }
