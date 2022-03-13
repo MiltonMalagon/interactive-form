@@ -57,16 +57,12 @@ function sumActivitiesCost() {
     const activitiesCost = document.querySelector("#activities-cost");
     const txtTotal = activitiesCost.textContent;
     const regex = /\d+/;
-    let total = 0;
+    let total = 0
 
     activities.addEventListener("change", e => {
         let cost = +e.target.getAttribute("data-cost");
 
-        if (e.target.checked) {
-            total += cost;
-        } else {
-            total -= cost;
-        }
+        (e.target.checked) ? total += cost : total -= cost;
         activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
     });
 }
@@ -114,3 +110,39 @@ function selectPayment() {
     });
 }
 selectPayment();
+
+// "Form Validation" section
+function formValidation() {
+    const form = document.querySelector("form");
+    const name = document.querySelector("#name");
+    const email = document.querySelector("#email");
+    const activitiesCost = document.querySelector("#activities-cost");
+
+    // Helper functions
+    const nameValidation = () => {
+        let nameValue = name.value;
+        const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]+$/i.test(nameValue);
+
+        return nameIsValid;
+    }
+    const emailValidation = () => {
+        let emailValue = email.value;
+        const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
+
+        return emailIsValid;
+    }
+    const activitiesValidation = () => {
+        let activityValue = activitiesCost.textContent;
+        const activityIsValid = /\d+/.test(activityValue);
+
+        return activityIsValid;
+    }
+
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+        (!nameValidation()) ? e.preventDefault() : console.log("Name is valid!");
+        (!emailValidation()) ? e.preventDefault() : console.log("Email is valid!");
+        (!activitiesValidation()) ? e.preventDefault() : console.log("Activities are valid!");
+    });
+}
+formValidation();
