@@ -54,6 +54,7 @@ selectTShirtColor();
 // "Register for Activities" section
 function sumActivitiesCost() {
     const activities = document.querySelector("#activities");
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
     const activitiesCost = document.querySelector("#activities-cost");
     const txtTotal = activitiesCost.textContent;
     const regex = /\d+/;
@@ -65,6 +66,23 @@ function sumActivitiesCost() {
         (e.target.checked) ? total += cost : total -= cost;
         activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
     });
+
+    // Accessibility section
+    for (let i = 0; i < checkboxes.length; i++) {
+        let checkbox = checkboxes[i];
+        
+        checkbox.addEventListener("focus", e => {
+            let label = e.target.parentNode;
+
+            label.className = "focus";
+        });
+
+        checkbox.addEventListener("blur", e => {
+            let label = e.target.parentNode;
+            
+            label.removeAttribute("class");
+        });
+    }
 }
 sumActivitiesCost();
 
@@ -114,31 +132,28 @@ selectPayment();
 // "Form Validation" section
 function formValidation() {
     const form = document.querySelector("form");
-    const name = document.querySelector("#name");
-    const email = document.querySelector("#email");
-    const activitiesCost = document.querySelector("#activities-cost");
-    const paymentOptions = document.querySelectorAll("#payment option");
 
     // Helper functions
     const nameValidation = () => {
-        let nameValue = name.value;
-        const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]+$/i.test(nameValue);
+        let nameValue = document.querySelector("#name").value;
+        const nameIsValid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(nameValue);
 
         return nameIsValid;
     }
     const emailValidation = () => {
-        let emailValue = email.value;
+        let emailValue = document.querySelector("#email").value;
         const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
 
         return emailIsValid;
     }
     const activitiesValidation = () => {
-        let activityValue = activitiesCost.textContent;
+        let activityValue = document.querySelector("#activities-cost").textContent;
         const activityIsValid = /\d{3}/.test(activityValue);
 
         return activityIsValid;
     }
     const creditCardValidation = () => {
+        const paymentOptions = document.querySelectorAll("#payment option");
         let cardValue = document.querySelector("#cc-num").value;
         let zipValue = document.querySelector("#zip").value;
         let cvvValue = document.querySelector("#cvv").value;  
@@ -157,11 +172,7 @@ function formValidation() {
     }
 
     form.addEventListener("submit", e => {
-        // e.preventDefault();
-        (nameValidation()) ? console.log("Name is valid!") : e.preventDefault();
-        (emailValidation()) ? console.log("Email is valid!") : e.preventDefault();
-        (activitiesValidation()) ? console.log("Activities are valid!") : e.preventDefault();
-        (creditCardValidation()) ? console.log("Credit Card numbers are valid!") : e.preventDefault();
+        (nameValidation() && emailValidation() && activitiesValidation() && creditCardValidation()) ? console.log("Your data is valid!") : e.preventDefault();
     });
 }
 formValidation();
