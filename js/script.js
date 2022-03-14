@@ -57,7 +57,7 @@ function sumActivitiesCost() {
     const activitiesCost = document.querySelector("#activities-cost");
     const txtTotal = activitiesCost.textContent;
     const regex = /\d+/;
-    let total = 0
+    let total = 0;
 
     activities.addEventListener("change", e => {
         let cost = +e.target.getAttribute("data-cost");
@@ -140,9 +140,9 @@ function formValidation() {
 
     form.addEventListener("submit", e => {
         e.preventDefault();
-        (!nameValidation()) ? e.preventDefault() : console.log("Name is valid!");
-        (!emailValidation()) ? e.preventDefault() : console.log("Email is valid!");
-        (!activitiesValidation()) ? e.preventDefault() : console.log("Activities are valid!");
+        (nameValidation()) ? console.log("Name is valid!") : e.preventDefault();
+        (emailValidation()) ? console.log("Email is valid!") : e.preventDefault();
+        (activitiesValidation()) ? console.log("Activities are valid!") : e.preventDefault();
     });
 }
 formValidation();
