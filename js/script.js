@@ -117,6 +117,7 @@ function formValidation() {
     const name = document.querySelector("#name");
     const email = document.querySelector("#email");
     const activitiesCost = document.querySelector("#activities-cost");
+    const paymentOptions = document.querySelectorAll("#payment option");
 
     // Helper functions
     const nameValidation = () => {
@@ -137,12 +138,30 @@ function formValidation() {
 
         return activityIsValid;
     }
+    const creditCardValidation = () => {
+        let cardValue = document.querySelector("#cc-num").value;
+        let zipValue = document.querySelector("#zip").value;
+        let cvvValue = document.querySelector("#cvv").value;  
+        
+        for (let i = 0; i < paymentOptions.length; i++) {
+            let creditCard = document.querySelector("#credit-card");
+
+            if (paymentOptions[i].selected && creditCard.hidden === false) {
+                const cardIsValid = /^\d{13,16}$/.test(cardValue);
+                const zipIsValid = /^\d{5}$/.test(zipValue);
+                const cvvIsValid = /^\d{3}$/.test(cvvValue);
+
+                return (cardIsValid && zipIsValid && cvvIsValid);
+            }
+        }
+    }
 
     form.addEventListener("submit", e => {
-        e.preventDefault();
+        // e.preventDefault();
         (nameValidation()) ? console.log("Name is valid!") : e.preventDefault();
         (emailValidation()) ? console.log("Email is valid!") : e.preventDefault();
         (activitiesValidation()) ? console.log("Activities are valid!") : e.preventDefault();
+        (creditCardValidation()) ? console.log("Credit Card numbers are valid!") : e.preventDefault();
     });
 }
 formValidation();
