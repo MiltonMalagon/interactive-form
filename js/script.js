@@ -146,7 +146,7 @@ function formValidation() {
         for (let i = 0; i < paymentOptions.length; i++) {
             let creditCard = document.querySelector("#credit-card");
 
-            if (paymentOptions[i].selected && creditCard.hidden === false) {
+            if (paymentOptions[i].selected && paymentOptions[i].value === "credit-card" && creditCard.hidden === false) {
                 const cardIsValid = /^\d{13,16}$/.test(cardValue);
                 const zipIsValid = /^\d{5}$/.test(zipValue);
                 const cvvIsValid = /^\d{3}$/.test(cvvValue);
