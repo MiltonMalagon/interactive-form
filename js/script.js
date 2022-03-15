@@ -54,7 +54,7 @@ selectTShirtColor();
 // "Register for Activities" section
 function sumActivitiesCost() {
     const activities = document.querySelector("#activities");
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    const checkboxes = activities.querySelectorAll("input[type=checkbox]");
     const activitiesCost = document.querySelector("#activities-cost");
     const txtTotal = activitiesCost.textContent;
     const regex = /\d+/;
@@ -72,13 +72,13 @@ function sumActivitiesCost() {
         let checkbox = checkboxes[i];
         
         checkbox.addEventListener("focus", e => {
-            let label = e.target.parentNode;
+            let label = e.target.parentElement;
 
-            label.className = "focus";
+            label.setAttribute("class", "focus");
         });
 
         checkbox.addEventListener("blur", e => {
-            let label = e.target.parentNode;
+            let label = e.target.parentElement;
             
             label.removeAttribute("class");
         });
@@ -132,31 +132,64 @@ selectPayment();
 // "Form Validation" section
 function formValidation() {
     const form = document.querySelector("form");
+    const name = document.querySelector("#name");
+    const email = document.querySelector("#email");
+    const total = document.querySelector("#activities-cost");
+    const paymentOptions = document.querySelectorAll("#payment option");
+
+    const card = document.querySelector("#cc-num");
+    const zip = document.querySelector("#zip");
+    const cvv = document.querySelector("#cvv");
+
+    function validationPass(element) {
+        const parent = element.parentElement;
+        const child = parent.lastElementChild;
+
+        parent.classList.add("valid");
+        parent.classList.remove("not-valid");
+        child.classList.add("hint");
+    }
+
+    function validationFail(element) {
+        const parent = element.parentElement;
+        const child = parent.lastElementChild;
+
+        parent.classList.add("not-valid");
+        parent.classList.remove("valid");
+        child.classList.remove("hint");
+    }
 
     // Helper functions
     const nameValidation = () => {
-        let nameValue = document.querySelector("#name").value;
+        let nameValue = name.value;
         const nameIsValid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(nameValue);
+
+        (nameIsValid) ? validationPass(name) : validationFail(name);
 
         return nameIsValid;
     }
     const emailValidation = () => {
-        let emailValue = document.querySelector("#email").value;
+        let emailValue = email.value;
         const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
+
+        (emailIsValid) ? validationPass(email) : validationFail(email);
 
         return emailIsValid;
     }
     const activitiesValidation = () => {
-        let activityValue = document.querySelector("#activities-cost").textContent;
+
+        // Try to figure out an alternative to listen for at least one activity checked.
+        let activityValue = total.textContent;
         const activityIsValid = /\d{3}/.test(activityValue);
+
+        (activityIsValid) ? validationPass(total) : validationFail(total);
 
         return activityIsValid;
     }
     const creditCardValidation = () => {
-        const paymentOptions = document.querySelectorAll("#payment option");
-        let cardValue = document.querySelector("#cc-num").value;
-        let zipValue = document.querySelector("#zip").value;
-        let cvvValue = document.querySelector("#cvv").value;  
+        let cardValue = card.value;
+        let zipValue = zip.value;
+        let cvvValue = cvv.value;
         
         for (let i = 0; i < paymentOptions.length; i++) {
             let creditCard = document.querySelector("#credit-card");
@@ -166,13 +199,28 @@ function formValidation() {
                 const zipIsValid = /^\d{5}$/.test(zipValue);
                 const cvvIsValid = /^\d{3}$/.test(cvvValue);
 
-                return (cardIsValid && zipIsValid && cvvIsValid);
+                (cardIsValid) ? validationPass(card) : validationFail(card);
+                (zipIsValid) ? validationPass(zip) : validationFail(zip);
+                (cvvIsValid) ? validationPass(cvv) : validationFail(cvv);
+
+                return cardIsValid && zipIsValid && cvvIsValid;
             }
         }
     }
 
     form.addEventListener("submit", e => {
-        (nameValidation() && emailValidation() && activitiesValidation() && creditCardValidation()) ? console.log("Your data is valid!") : e.preventDefault();
+        if (!nameValidation()) {
+            e.preventDefault();
+        }
+        if (!emailValidation()) {
+            e.preventDefault();
+        }
+        if (!activitiesValidation()) {
+            e.preventDefault();
+        }
+        if (!creditCardValidation()) {
+            e.preventDefault();
+        }
     });
 }
 formValidation();
