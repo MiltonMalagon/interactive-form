@@ -60,13 +60,6 @@ function sumActivitiesCost() {
     const regex = /\d+/;
     let total = 0;
 
-    activities.addEventListener("change", e => {
-        let cost = +e.target.getAttribute("data-cost");
-
-        (e.target.checked) ? total += cost : total -= cost;
-        activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
-    });
-
     // Accessibility section
     for (let i = 0; i < checkboxes.length; i++) {
         let checkbox = checkboxes[i];
@@ -83,6 +76,33 @@ function sumActivitiesCost() {
             label.removeAttribute("class");
         });
     }
+
+    activities.addEventListener("change", e => {
+        // Prevent users from registering for conflicting activities
+        let clicked = e.target;
+        let clickedData = clicked.getAttribute("data-day-and-time");
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            let checkbox = checkboxes[i];
+            let label = checkbox.parentElement;
+            let checkboxData = checkbox.getAttribute("data-day-and-time");
+
+            if (clickedData === checkboxData && clicked !== checkbox) {
+                if (clicked.checked) {
+                    checkbox.disabled = true;
+                    label.setAttribute("class", "disabled");
+                } else {
+                    checkbox.disabled = false;
+                    label.removeAttribute("class");
+                }
+            }
+        }
+
+        let cost = +e.target.getAttribute("data-cost");
+
+        (e.target.checked) ? total += cost : total -= cost;
+        activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
+    });
 }
 sumActivitiesCost();
 
@@ -141,6 +161,7 @@ function formValidation() {
     const zip = document.querySelector("#zip");
     const cvv = document.querySelector("#cvv");
 
+    // Accessibility helper functions
     function validationPass(element) {
         const parent = element.parentElement;
         const child = parent.lastElementChild;
@@ -159,7 +180,7 @@ function formValidation() {
         child.classList.remove("hint");
     }
 
-    // Helper functions
+    // Validation helper functions
     const nameValidation = () => {
         let nameValue = name.value;
         const nameIsValid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(nameValue);
