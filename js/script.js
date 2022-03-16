@@ -1,6 +1,6 @@
 // The "Name" field
 function focusNameField() {
-    document.getElementById("name").focus();
+    document.querySelector("#name").focus();
 }
 focusNameField();
 
@@ -142,30 +142,39 @@ function formValidation() {
     const cvv = document.querySelector("#cvv");
 
     // Accessibility helper functions
-    function validationPass(element) {
-        const parent = element.parentElement;
-        const child = parent.lastElementChild;
+    function validationPass(validation, element) {
+        let parent = element.parentElement;
+        let child = parent.lastElementChild;
 
-        parent.classList.add("valid");
-        parent.classList.remove("not-valid");
-        child.classList.add("hint");
+        if (validation) {
+            parent.classList.add("valid");
+            parent.classList.remove("not-valid");
+            child.classList.add("hint");
+        } else {
+            parent.classList.add("not-valid");
+            parent.classList.remove("valid");
+            child.classList.remove("hint");
+        }
+        
     }
 
-    function validationFail(element) {
-        const parent = element.parentElement;
-        const child = parent.lastElementChild;
+    // function validationFail(element) {
+    //     const parent = element.parentElement;
+    //     const child = parent.lastElementChild;
 
-        parent.classList.add("not-valid");
-        parent.classList.remove("valid");
-        child.classList.remove("hint");
-    }
+        // parent.classList.add("not-valid");
+        // parent.classList.remove("valid");
+        // child.classList.remove("hint");
+    // }
 
     // Validation helper functions
     const nameValidation = () => {
         let nameValue = name.value;
         const nameIsValid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(nameValue);
 
-        (nameIsValid) ? validationPass(name) : validationFail(name);
+        validationPass(nameIsValid, name);
+
+        // (nameIsValid) ? validationPass(name) : validationFail(name);
 
         return nameIsValid;
     }
@@ -173,7 +182,9 @@ function formValidation() {
         let emailValue = email.value;
         const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
 
-        (emailIsValid) ? validationPass(email) : validationFail(email);
+        validationPass(emailIsValid, email);
+
+        // (emailIsValid) ? validationPass(email) : validationFail(email);
 
         return emailIsValid;
     }
@@ -182,8 +193,10 @@ function formValidation() {
         // Try to figure out an alternative to listen for at least one activity checked.
         let activityValue = total.textContent;
         const activityIsValid = /\d{3}/.test(activityValue);
+        
+        validationPass(activityIsValid, total);
 
-        (activityIsValid) ? validationPass(total) : validationFail(total);
+        // (activityIsValid) ? validationPass(total) : validationFail(total);
 
         return activityIsValid;
     }
@@ -201,9 +214,13 @@ function formValidation() {
                 const zipIsValid = /^\d{5}$/.test(zipValue);
                 const cvvIsValid = /^\d{3}$/.test(cvvValue);
 
-                (cardIsValid) ? validationPass(card) : validationFail(card);
-                (zipIsValid) ? validationPass(zip) : validationFail(zip);
-                (cvvIsValid) ? validationPass(cvv) : validationFail(cvv);
+                validationPass(cardIsValid, card);
+                validationPass(zipIsValid, zip);
+                validationPass(cvvIsValid, cvv);
+
+                // (cardIsValid) ? validationPass(card) : validationFail(card);
+                // (zipIsValid) ? validationPass(zip) : validationFail(zip);
+                // (cvvIsValid) ? validationPass(cvv) : validationFail(cvv);
 
                 return cardIsValid && zipIsValid && cvvIsValid;
             }
