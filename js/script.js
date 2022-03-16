@@ -47,11 +47,12 @@ selectTShirtColor();
 // I want to refactor this entire function (more concise and neat, especially vars)
 function sumActivitiesCost() {
     const activities = document.querySelector("#activities");
-    const checkboxes = activities.querySelectorAll("input[type=checkbox]");
     const activitiesCost = document.querySelector("#activities-cost");
-    const txtTotal = activitiesCost.textContent;
-    const regex = /\d+/;
+    const checkboxes = document.querySelectorAll("input[data-cost]");
     let total = 0;
+    // const txtTotal = activitiesCost.textContent;
+    // const regex = /\d+/;
+    // let total = 0;
 
     // Accessibility section
     for (let i = 0; i < checkboxes.length; i++) {
@@ -70,18 +71,18 @@ function sumActivitiesCost() {
         });
     }
 
+    // Prevent users from registering for conflicting activities
     activities.addEventListener("change", e => {
-        // Prevent users from registering for conflicting activities
         let clicked = e.target;
-        let clickedData = clicked.getAttribute("data-day-and-time");
-        let cost = +e.target.getAttribute("data-cost");
+        let clickedCost = +clicked.getAttribute("data-cost");
+        let clickedDate = clicked.getAttribute("data-day-and-time");        
 
         for (let i = 0; i < checkboxes.length; i++) {
             let checkbox = checkboxes[i];
             let label = checkbox.parentElement;
-            let checkboxData = checkbox.getAttribute("data-day-and-time");
+            let checkboxDate = checkbox.getAttribute("data-day-and-time");
 
-            if (clickedData === checkboxData && clicked !== checkbox) {
+            if (clickedDate === checkboxDate && clicked !== checkbox) {
                 if (clicked.checked) {
                     checkbox.disabled = true;
                     label.setAttribute("class", "disabled");
@@ -92,9 +93,12 @@ function sumActivitiesCost() {
             }
         }
 
-        //Review event object
-        (e.target.checked) ? total += cost : total -= cost;
-        activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
+        // Update "Total:" to reflect the sum of the cost of the user’s selected activities
+        (clicked.checked) ? total += clickedCost : total -= clickedCost;
+        
+        activitiesCost.textContent = `Total: $${total}`;
+
+        // activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
     });
 }
 sumActivitiesCost();
@@ -136,6 +140,7 @@ function formValidation() {
     const form = document.querySelector("form");
     const name = document.querySelector("#name");
     const email = document.querySelector("#email");
+    // const activities = document.querySelector("#activities");
     const total = document.querySelector("#activities-cost");
     const paymentOptions = document.querySelectorAll("#payment option");
 
@@ -190,10 +195,9 @@ function formValidation() {
         return emailIsValid;
     }
     const activitiesValidation = () => {
-
         // Try to figure out an alternative to listen for at least one activity checked.
         let activityValue = total.textContent;
-        const activityIsValid = /\d{3}/.test(activityValue);
+        const activityIsValid = /\$\d{3}/.test(activityValue);
         
         validationPass(activityIsValid, total);
 
