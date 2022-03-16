@@ -138,12 +138,15 @@ selectPayment();
 // "Form Validation" section
 function formValidation() {
     const form = document.querySelector("form");
+    
     const name = document.querySelector("#name");
     const email = document.querySelector("#email");
-    // const activities = document.querySelector("#activities");
-    const total = document.querySelector("#activities-cost");
-    const paymentOptions = document.querySelectorAll("#payment option");
 
+    const activities = document.querySelector('#activities');
+    const activitiesCost = document.querySelector("#activities-cost");
+    let activitiesSelected = 0;
+
+    const paymentOptions = document.querySelectorAll("#payment option");
     const card = document.querySelector("#cc-num");
     const zip = document.querySelector("#zip");
     const cvv = document.querySelector("#cvv");
@@ -164,15 +167,6 @@ function formValidation() {
         }
     }
 
-    // function validationFail(element) {
-    //     const parent = element.parentElement;
-    //     const child = parent.lastElementChild;
-
-        // parent.classList.add("not-valid");
-        // parent.classList.remove("valid");
-        // child.classList.remove("hint");
-    // }
-
     // Validation helper functions
     const nameValidation = () => {
         let nameValue = name.value;
@@ -180,31 +174,30 @@ function formValidation() {
 
         validationPass(nameIsValid, name);
 
-        // (nameIsValid) ? validationPass(name) : validationFail(name);
-
         return nameIsValid;
     }
+    
     const emailValidation = () => {
         let emailValue = email.value;
         const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
 
         validationPass(emailIsValid, email);
 
-        // (emailIsValid) ? validationPass(email) : validationFail(email);
-
         return emailIsValid;
     }
-    const activitiesValidation = () => {
-        // Try to figure out an alternative to listen for at least one activity checked.
-        let activityValue = total.textContent;
-        const activityIsValid = /\$\d{3}/.test(activityValue);
-        
-        validationPass(activityIsValid, total);
 
-        // (activityIsValid) ? validationPass(total) : validationFail(total);
+    const activitiesValidation = () => {
+        const activityIsValid = activitiesSelected > 0;
+
+        activities.addEventListener('change', e => {
+            (e.target.checked) ? activitiesSelected++ : activitiesSelected--;
+        });
+
+        validationPass(activityIsValid, activitiesCost);
 
         return activityIsValid;
     }
+    
     const creditCardValidation = () => {
         let cardValue = card.value;
         let zipValue = zip.value;
