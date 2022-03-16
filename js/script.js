@@ -44,6 +44,7 @@ function selectTShirtColor() {
 selectTShirtColor();
 
 // "Register for Activities" section
+// I want to refactor this entire function (more concise and neat, especially vars)
 function sumActivitiesCost() {
     const activities = document.querySelector("#activities");
     const checkboxes = activities.querySelectorAll("input[type=checkbox]");
@@ -73,6 +74,7 @@ function sumActivitiesCost() {
         // Prevent users from registering for conflicting activities
         let clicked = e.target;
         let clickedData = clicked.getAttribute("data-day-and-time");
+        let cost = +e.target.getAttribute("data-cost");
 
         for (let i = 0; i < checkboxes.length; i++) {
             let checkbox = checkboxes[i];
@@ -90,8 +92,7 @@ function sumActivitiesCost() {
             }
         }
 
-        let cost = +e.target.getAttribute("data-cost");
-
+        //Review event object
         (e.target.checked) ? total += cost : total -= cost;
         activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
     });
@@ -99,6 +100,7 @@ function sumActivitiesCost() {
 sumActivitiesCost();
 
 // "Payment Info" section
+// I want to refactor this entire function (more concise and neat, especially vars)
 function selectPayment() {
     const paymentMenu = document.querySelector("#payment"); // select element;
     const paymentOptions = document.querySelectorAll("#payment option"); // option elements
@@ -155,7 +157,6 @@ function formValidation() {
             parent.classList.remove("valid");
             child.classList.remove("hint");
         }
-        
     }
 
     // function validationFail(element) {
@@ -208,7 +209,7 @@ function formValidation() {
         for (let i = 0; i < paymentOptions.length; i++) {
             let creditCard = document.querySelector("#credit-card");
 
-            // Review and try a more dynamic possibility
+            // Review and try a more dynamic conditional
             if (paymentOptions[i].selected && paymentOptions[i].value === "credit-card" && creditCard.hidden === false) {
                 const cardIsValid = /^\d{13,16}$/.test(cardValue);
                 const zipIsValid = /^\d{5}$/.test(zipValue);
