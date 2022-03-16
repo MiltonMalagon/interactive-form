@@ -9,13 +9,9 @@ function selectOtherJob() {
     const jobMenu = document.querySelector("#title");
     const jobInput = document.querySelector("#other-job-role");
 
-    jobInput.style.display = "none";
+    jobInput.hidden = true;
     jobMenu.addEventListener("change", e => {
-        if (e.target.value === "other") {
-            jobInput.style.display = "block"
-        } else {
-            jobInput.style.display = "none"
-        }
+        (e.target.value === "other") ? jobInput.hidden = false : jobInput.hidden = true;
     });
 }
 selectOtherJob();
@@ -40,11 +36,7 @@ function selectTShirtColor() {
             for (let i = 0; i < colorOptions.length; i++) {
                 let theme = colorOptions[i].getAttribute("data-theme");
                 
-                if (theme !== value) {
-                    colorOptions[i].hidden = true;
-                } else {
-                    colorOptions[i].hidden = false;
-                }
+                (theme !== value) ? colorOptions[i].hidden = true : colorOptions[i].hidden = false;
             }
         }
     });
@@ -116,20 +108,12 @@ function selectPayment() {
     for (let i = 0; i < paymentOptions.length; i++) {
         let attribute = paymentOptions[i].getAttribute("value");
 
-        if (attribute === "credit-card") {
-            paymentOptions[i].selected = true;
-        } else {
-            paymentOptions[i].selected = false;
-        }
+        (attribute === "credit-card") ? paymentOptions[i].selected = true : paymentOptions[i].selected = false;
         
         for (let j = 2; j < paymentBoxes.length; j++) {
             let attribute = paymentBoxes[j].getAttribute("id");
             
-            if (attribute !== "credit-card") {
-                paymentBoxes[j].hidden = true;
-            } else {
-                paymentBoxes[j].hidden = false;
-            }
+            (attribute !== "credit-card") ? paymentBoxes[j].hidden = true : paymentBoxes[j].hidden = false;
         }
     }
 
@@ -139,11 +123,7 @@ function selectPayment() {
         for (let i = 2; i < paymentBoxes.length; i++) {
             let attribute = paymentBoxes[i].getAttribute("id");
 
-            if (option === attribute) {
-                paymentBoxes[i].hidden = false;
-            } else {
-                paymentBoxes[i].hidden = true;
-            }
+            (option === attribute) ? paymentBoxes[i].hidden = false : paymentBoxes[i].hidden = true;
         }
     });
 }
@@ -215,6 +195,7 @@ function formValidation() {
         for (let i = 0; i < paymentOptions.length; i++) {
             let creditCard = document.querySelector("#credit-card");
 
+            // Review and try a more dynamic possibility
             if (paymentOptions[i].selected && paymentOptions[i].value === "credit-card" && creditCard.hidden === false) {
                 const cardIsValid = /^\d{13,16}$/.test(cardValue);
                 const zipIsValid = /^\d{5}$/.test(zipValue);
