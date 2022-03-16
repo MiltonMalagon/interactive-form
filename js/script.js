@@ -142,7 +142,7 @@ function formValidation() {
     const name = document.querySelector("#name");
     const email = document.querySelector("#email");
 
-    const activities = document.querySelector('#activities');
+    const activities = document.querySelector("#activities");
     const activitiesCost = document.querySelector("#activities-cost");
     let activitiesSelected = 0;
 
