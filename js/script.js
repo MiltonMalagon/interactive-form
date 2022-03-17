@@ -1,10 +1,12 @@
-// The "Name" field
+// The "Name" field (refactored)
 function focusNameField() {
-    document.querySelector("#name").focus();
+    const name = document.querySelector("#name")
+    
+    name.focus();
 }
 focusNameField();
 
-// The "Job Role" section
+// The "Job Role" section (refactored)
 function showOtherJob() {
     const jobSelector = document.querySelector("#title");
     const jobOther = document.querySelector("#other-job-role");
@@ -19,7 +21,7 @@ function showOtherJob() {
 }
 showOtherJob();
 
-// The "T-Shirt Info" section
+// The "T-Shirt Info" section (refactored)
 function enableTShirtColor() {
     const designSelector = document.querySelector("#design");
     const colorSelector = document.querySelector("#color");
@@ -30,8 +32,8 @@ function enableTShirtColor() {
     designSelector.addEventListener("change", e => {
         let optionTheme = e.target.value;
 
-        colorSelector.firstElementChild.selected = true;
         colorSelector.disabled = false;
+        colorSelector.firstElementChild.selected = true;
 
         if (optionTheme === "js puns" || optionTheme === "heart js") {
             for (let i = 0; colorOptions.length; i++) {
@@ -45,8 +47,8 @@ function enableTShirtColor() {
 }
 enableTShirtColor();
 
-// "Register for Activities" section
-function sumActivitiesCost() {
+// "Register for Activities" section (refactored)
+function recordActivities() {
     const activities = document.querySelector("#activities");
     const activitiesCost = document.querySelector("#activities-cost");
     const checkboxes = document.querySelectorAll("input[data-cost]");
@@ -77,8 +79,8 @@ function sumActivitiesCost() {
 
         for (let i = 0; i < checkboxes.length; i++) {
             let checkbox = checkboxes[i];
-            let label = checkbox.parentElement;
             let checkboxDate = checkbox.getAttribute("data-day-and-time");
+            let label = checkbox.parentElement;
 
             if (clickedDate === checkboxDate && clicked !== checkbox) {
                 if (clicked.checked) {
@@ -90,16 +92,17 @@ function sumActivitiesCost() {
                 }
             }
         }
+
         // Update "Total:" to reflect the sum of the cost of the user’s selected activities
         (clicked.checked) ? total += clickedCost : total -= clickedCost;        
         
         activitiesCost.textContent = `Total: $${total}`;
     });
 }
-sumActivitiesCost();
+recordActivities();
 
-// "Payment Info" section
-function selectPayment() {
+// "Payment Info" section (refactored)
+function enablePayments() {
     const paymentSelector = document.querySelector("#payment");
     const paymentOptions = document.querySelectorAll("#payment option");
     const paymentMethods = document.querySelectorAll(".payment-methods div[id]");
@@ -129,9 +132,9 @@ function selectPayment() {
         }
     });
 }
-selectPayment();
+enablePayments();
 
-// "Form Validation" section
+// "Form Validation" section (please review)
 function formValidation() {
     const form = document.querySelector("form");
     
