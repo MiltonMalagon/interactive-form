@@ -5,54 +5,52 @@ function focusNameField() {
 focusNameField();
 
 // The "Job Role" section
-function selectOtherJob() {
-    const jobMenu = document.querySelector("#title");
-    const jobInput = document.querySelector("#other-job-role");
+function showOtherJob() {
+    const jobSelector = document.querySelector("#title");
+    const jobOther = document.querySelector("#other-job-role");
 
-    jobInput.hidden = true;
-    jobMenu.addEventListener("change", e => {
-        (e.target.value === "other") ? jobInput.hidden = false : jobInput.hidden = true;
+    jobOther.hidden = true;
+    
+    jobSelector.addEventListener("change", e => {
+        let optionValue = e.target.value;
+
+        (optionValue === "other") ? jobOther.hidden = false : jobOther.hidden = true;
     });
 }
-selectOtherJob();
+showOtherJob();
 
 // The "T-Shirt Info" section
-function selectTShirtColor() {
-    const designMenu = document.querySelector("#design");
-    const colorMenu = document.querySelector("#color");
-    const colorOptions = colorMenu.querySelectorAll("option[data-theme]");
+function enableTShirtColor() {
+    const designSelector = document.querySelector("#design");
+    const colorSelector = document.querySelector("#color");
+    const colorOptions = document.querySelectorAll("#color option[data-theme]");
 
-    colorMenu.disabled = true;
+    colorSelector.disabled = true;
     
-    designMenu.addEventListener("change", e => {
-        let value = e.target.value;
-        let firstOption = colorMenu.firstElementChild;
+    designSelector.addEventListener("change", e => {
+        let optionTheme = e.target.value;
 
-        colorMenu.disabled = false;
-        
-        if (value === "js puns" || value === "heart js") {
-            firstOption.selected = true;
+        colorSelector.firstElementChild.selected = true;
+        colorSelector.disabled = false;
 
-            for (let i = 0; i < colorOptions.length; i++) {
-                let theme = colorOptions[i].getAttribute("data-theme");
-                
-                (theme !== value) ? colorOptions[i].hidden = true : colorOptions[i].hidden = false;
+        if (optionTheme === "js puns" || optionTheme === "heart js") {
+            for (let i = 0; colorOptions.length; i++) {
+                let colorOption = colorOptions[i];
+                let dataTheme = colorOption.dataset.theme;
+    
+                (optionTheme === dataTheme) ? colorOption.hidden = false : colorOption.hidden = true;
             }
         }
     });
 }
-selectTShirtColor();
+enableTShirtColor();
 
 // "Register for Activities" section
-// I want to refactor this entire function (more concise and neat, especially vars)
 function sumActivitiesCost() {
     const activities = document.querySelector("#activities");
     const activitiesCost = document.querySelector("#activities-cost");
     const checkboxes = document.querySelectorAll("input[data-cost]");
     let total = 0;
-    // const txtTotal = activitiesCost.textContent;
-    // const regex = /\d+/;
-    // let total = 0;
 
     // Accessibility section
     for (let i = 0; i < checkboxes.length; i++) {
@@ -92,44 +90,42 @@ function sumActivitiesCost() {
                 }
             }
         }
-
         // Update "Total:" to reflect the sum of the cost of the user’s selected activities
-        (clicked.checked) ? total += clickedCost : total -= clickedCost;
+        (clicked.checked) ? total += clickedCost : total -= clickedCost;        
         
         activitiesCost.textContent = `Total: $${total}`;
-
-        // activitiesCost.textContent = `${txtTotal.replace(regex, total)}`;
     });
 }
 sumActivitiesCost();
 
 // "Payment Info" section
-// I want to refactor this entire function (more concise and neat, especially vars)
 function selectPayment() {
-    const paymentMenu = document.querySelector("#payment"); // select element;
-    const paymentOptions = document.querySelectorAll("#payment option"); // option elements
-    const paymentField = document.querySelector(".payment-methods"); // fieldset element
-    const paymentBoxes = paymentField.children;
+    const paymentSelector = document.querySelector("#payment");
+    const paymentOptions = document.querySelectorAll("#payment option");
+    const paymentMethods = document.querySelectorAll(".payment-methods div[id]");
 
     for (let i = 0; i < paymentOptions.length; i++) {
-        let attribute = paymentOptions[i].getAttribute("value");
+        let paymentOption = paymentOptions[i];
+        let optionValue = paymentOption.value;
 
-        (attribute === "credit-card") ? paymentOptions[i].selected = true : paymentOptions[i].selected = false;
-        
-        for (let j = 2; j < paymentBoxes.length; j++) {
-            let attribute = paymentBoxes[j].getAttribute("id");
+        (optionValue === "credit-card") ? paymentOption.selected = true : paymentOption.selected = false;
+
+        for (let j = 0; j < paymentMethods.length; j++ ) {
+            let paymentMethod = paymentMethods[j];
+            let methodId = paymentMethod.id;
             
-            (attribute !== "credit-card") ? paymentBoxes[j].hidden = true : paymentBoxes[j].hidden = false;
+            (methodId === "credit-card") ? paymentMethod.hidden = false : paymentMethod.hidden = true;
         }
     }
 
-    paymentMenu.addEventListener("change", e => {
-        let option = e.target.value;
+    paymentSelector.addEventListener("change", e => {
+        let optionValue = e.target.value;
 
-        for (let i = 2; i < paymentBoxes.length; i++) {
-            let attribute = paymentBoxes[i].getAttribute("id");
+        for (let i = 0; paymentMethods.length; i++) {
+            let paymentMethod = paymentMethods[i];
+            let methodId = paymentMethod.id;
 
-            (option === attribute) ? paymentBoxes[i].hidden = false : paymentBoxes[i].hidden = true;
+            (optionValue === methodId) ? paymentMethod.hidden = false : paymentMethod.hidden = true;
         }
     });
 }
@@ -167,6 +163,10 @@ function formValidation() {
         }
     }
 
+    activities.addEventListener('change', e => {
+        (e.target.checked) ? activitiesSelected++ : activitiesSelected--;
+    });
+
     // Validation helper functions
     const nameValidation = () => {
         let nameValue = name.value;
@@ -187,11 +187,7 @@ function formValidation() {
     }
 
     const activitiesValidation = () => {
-        const activityIsValid = activitiesSelected > 0;
-
-        activities.addEventListener('change', e => {
-            (e.target.checked) ? activitiesSelected++ : activitiesSelected--;
-        });
+        let activityIsValid = activitiesSelected > 0;
 
         validationPass(activityIsValid, activitiesCost);
 
