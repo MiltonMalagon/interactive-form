@@ -127,8 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ///*** -- VALIDATION SECTION -- ***///
     // "Accessibility" section
     function messageValid(element) {
-        let parent_element = element.parentElement;
-        let last_child_element = parent_element.lastElementChild;
+        const parent_element = element.parentElement;
+        const last_child_element = parent_element.lastElementChild;
 
         parent_element.classList.add("valid");
         parent_element.classList.remove("not-valid");
@@ -136,33 +136,108 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function messageInvalid(element) {
-        let parent_element = element.parentElement;
-        let last_child_element = parent_element.lastElementChild;
+        const parent_element = element.parentElement;
+        const last_child_element = parent_element.lastElementChild;        
 
         parent_element.classList.add("not-valid");
         parent_element.classList.remove("valid");
         last_child_element.style.display = "block";
+
+        switch (element.id) {
+            case "name":
+                last_child_element.textContent = `Name field cannot be blank`;
+                break;
+            case "email":
+                last_child_element.textContent = `Email address must be formatted correctly`;
+                break;
+            case "activities-cost":
+                last_child_element.textContent = `Choose at least one activity`;
+                break;
+            case "cc-num":
+                last_child_element.textContent = `Credit card number must be between 13 - 16 digits`;
+                break;
+            case "zip":
+                last_child_element.textContent = `Zip Code must be 5 digits`;
+                break;
+            case "cvv":
+                last_child_element.textContent = `CVV must be 3 digits`;
+                break;
+        }
+    }
+    
+    // "Conditional Error Message" section
+    function messageCondition(element) {
+        const parent_element = element.parentElement;
+        const last_child_element = parent_element.lastElementChild;
+
+        parent_element.classList.add("not-valid");
+        parent_element.classList.remove("valid");
+        last_child_element.style.display = "block";
+
+        switch (element.id) {
+            case "name":
+                last_child_element.textContent = `Please provide a valid 'First Last' name`;
+                break;
+            case "email":
+                last_child_element.textContent = `A valid 'email@email.com' can help`;
+                break;
+            case "cc-num":
+                last_child_element.textContent = `Please enter only 13 - 16 numbers`;
+                break;
+            case "zip":
+                last_child_element.textContent = `Please enter 5 numbers`;
+                break;
+            case "cvv":
+                last_child_element.textContent = `Please enter 3 numbers`;
+                break;
+        }
     }
 
     // Helper functions
     const nameValidation = () => {
         let name_is_valid = /^[a-zA-Z]+ ?[a-zA-Z]+$/i.test(name.value);
-        
-        (name_is_valid) ? messageValid(name) : messageInvalid(name);
+
+        if (name_is_valid && name.value) {
+            messageValid(name);
+        }
+
+        if (!name_is_valid && !name.value) {
+            messageInvalid(name);
+        }
+
+        if (!name_is_valid && name.value) {
+            messageCondition(name);
+        }
 
         return name_is_valid;
     }
     const emailValidation = () => {
         let email_is_valid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value);
 
-        (email_is_valid) ? messageValid(email) : messageInvalid(email);
+        if (email_is_valid && email.value) {
+            messageValid(email);
+        }
+
+        if (!email_is_valid && !email.value) {
+            messageInvalid(email);
+        }
+
+        if (!email_is_valid && email.value) {
+            messageCondition(email);
+        }
 
         return email_is_valid;
     }
     const activityValidation = () => {
         let activity_is_valid = activities_cost > 0;
 
-        (activity_is_valid) ? messageValid(activities_total) : messageInvalid(activities_total);
+        if (activity_is_valid) {
+            messageValid(activities_total);
+        }
+
+        if (!activity_is_valid) {
+            messageInvalid(activities_total);
+        }
 
         return activity_is_valid;
     }
@@ -172,9 +247,41 @@ document.addEventListener("DOMContentLoaded", () => {
             let zip_is_valid = /^\d{5}$/.test(zip_code.value);
             let cvv_is_valid = /^\d{3}$/.test(card_value.value);
 
-            (cc_is_valid) ? messageValid(card_number) : messageInvalid(card_number);
-            (zip_is_valid) ? messageValid(zip_code) : messageInvalid(zip_code);
-            (cvv_is_valid) ? messageValid(card_value) : messageInvalid(card_value);  
+            if (cc_is_valid && card_number.value) {
+                messageValid(card_number);
+            }
+    
+            if (!cc_is_valid && !card_number.value) {
+                messageInvalid(card_number);
+            }
+    
+            if (!cc_is_valid && card_number.value) {
+                messageCondition(card_number);
+            }
+
+            if (zip_is_valid && zip_code.value) {
+                messageValid(zip_code);
+            }
+    
+            if (!zip_is_valid && !zip_code.value) {
+                messageInvalid(zip_code);
+            }
+    
+            if (!zip_is_valid && zip_code.value) {
+                messageCondition(zip_code);
+            }
+            
+            if (cvv_is_valid && card_value.value) {
+                messageValid(card_value);
+            }
+    
+            if (!cvv_is_valid && !card_value.value) {
+                messageInvalid(card_value);
+            }
+    
+            if (!cvv_is_valid && card_value.value) {
+                messageCondition(card_value);
+            }
 
             return cc_is_valid && zip_is_valid && cvv_is_valid;
         }
