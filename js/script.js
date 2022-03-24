@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //** -- ACTIVITY SECTION VARIABLES -- **//
     const activities = document.querySelector("#activities");
+    const checkboxes = document.querySelectorAll("#activities input[type=checkbox]");
     const activities_total = document.querySelector("#activities-cost");
     let activities_cost = 0;
 
@@ -19,9 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //** -- VALIDATION SECTION VARIABLES -- **//
     const form = document.querySelector("form");
-    // const fieldsets = document.querySelectorAll("fieldset");
     const email = document.querySelector("#email");
-    const cc_data = document.querySelectorAll("#credit-card input");
+    const card_number = document.querySelector("#cc-num");
+    const zip_code = document.querySelector("#zip");
+    const card_value = document.querySelector("#cvv");
 
     ///*** -- INFO SECTION -- ***///
     // "Name" section
@@ -32,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let job_option = e.target.value;
 
         (job_option === "other") ? job_other.hidden = false : job_other.hidden = true;
-    })
+    });
 
     job_other.hidden = true;
 
@@ -49,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         color.disabled = false;
         color_options[0].selected = true;
-    })
+    });
 
     color.disabled = true;
 
@@ -59,73 +61,135 @@ document.addEventListener("DOMContentLoaded", () => {
         let activity = e.target;
         let activity_cost = +activity.dataset.cost;
         let activity_date = activity.dataset.dayAndTime;
+
+        // "Conflicting Activities" section
+        for (let i = 0; i < checkboxes.length; i++) {
+            let checkbox = checkboxes[i];
+            let checkbox_date = checkbox.dataset.dayAndTime;
+            let label = checkbox.parentElement;
+
+            if (checkbox_date === activity_date && checkbox !== activity) {
+                if (activity.checked) {
+                    checkbox.disabled = true;
+                    label.setAttribute("class", "disabled");
+                } else {
+                    checkbox.disabled = false;
+                    label.removeAttribute("class");
+                }
+            }
+        }
         
         (activity.checked) ? activities_cost += activity_cost : activities_cost -= activity_cost;
         
         activities_total.textContent = `Total: $${activities_cost}`;
-    })
+    });
+
+    // "Accessibility" section
+    for (let i = 0; i < checkboxes.length; i++) {
+        let checkbox = checkboxes[i];
+
+        function listenEvent() {
+            return e => {
+                const event_type = e.type;
+                const label = e.target.parentElement;
+
+                if (event_type === "focus") {
+                    label.setAttribute("class", "focus");
+                }
+
+                if (event_type === "blur") {
+                    label.removeAttribute("class");
+                }
+            }
+
+        }
+
+        checkbox.addEventListener("focus", listenEvent());
+        checkbox.addEventListener("blur", listenEvent());
+    }
 
     ///*** -- PAYMENT SECTION -- ***///
     // "Payment Info" section
     payment.addEventListener("change", e => {
         let payment_option = e.target.value;
 
-        // for (let i = 0; fieldsets.length; i++) {
-        //     if (payment_option === payment_methods[i].id) {
-
-        //     }
-        // }
-        
-        for (let i = 0; i < payment_methods.length; i++) {
-            for (let j = 0; j < cc_data.length; j++) {
-                if (payment_option === payment_methods[i].id) {
-                    payment_methods[i].hidden = false;
-                } else {
-                    payment_methods[i].hidden = true;
-                }
-
-                if (payment_methods[0].hidden === true) {
-                    cc_data[j].disabled = true;
-                } else {
-                    cc_data[j].disabled = false;
-                }
-            }
+        for (let i = 0; i < payment_methods.length; i++) { 
+            (payment_option === payment_methods[i].id) ? payment_methods[i].hidden = false : payment_methods[i].hidden = true;
         }
-    })
+    });
 
     for (let i = 0; i < payment_methods.length; i++) {
-        (payment_methods[i] === payment_methods[0]) ? payment_methods[i].hidden = false : payment_methods[i].hidden = true;
+        (payment_options[1].value === payment_methods[i].id) ? payment_methods[i].hidden = false : payment_methods[i].hidden = true;
     }
 
     payment_options[1].selected = true;
 
     ///*** -- VALIDATION SECTION -- ***///
-    // "Form Validation" section
-    form.addEventListener("submit", e => {
+    // "Accessibility" section
+    function messageValid(element) {
+        let parent_element = element.parentElement;
+        let last_child_element = parent_element.lastElementChild;
 
-        const nameValidation = () => {
-            let name_is_valid = /^[a-zA-Z]+ ?[a-zA-Z]+$/i.test(name.value);            
+        parent_element.classList.add("valid");
+        parent_element.classList.remove("not-valid");
+        last_child_element.style.display = "none";
+    }
 
-            return name_is_valid;
-        }
-        const emailValidation = () => {
-            let email_is_valid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value);
+    function messageInvalid(element) {
+        let parent_element = element.parentElement;
+        let last_child_element = parent_element.lastElementChild;
 
-            return email_is_valid;
-        }
-        const activityValidation = () => {
-            let activity_is_valid = activities_cost > 0;
+        parent_element.classList.add("not-valid");
+        parent_element.classList.remove("valid");
+        last_child_element.style.display = "block";
+    }
 
-            return activity_is_valid;
-        }
-        const creditCardValidation = () => {
-            let cc_is_valid = /^\d{13,16}$/.test(cc_data[0].value);
-            let zip_is_valid = /^\d{5}$/.test(cc_data[1].value);
-            let cvv_is_valid = /^\d{3}$/.test(cc_data[2].value);
+    // Helper functions
+    const nameValidation = () => {
+        let name_is_valid = /^[a-zA-Z]+ ?[a-zA-Z]+$/i.test(name.value);
+        
+        (name_is_valid) ? messageValid(name) : messageInvalid(name);
+
+        return name_is_valid;
+    }
+    const emailValidation = () => {
+        let email_is_valid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value);
+
+        (email_is_valid) ? messageValid(email) : messageInvalid(email);
+
+        return email_is_valid;
+    }
+    const activityValidation = () => {
+        let activity_is_valid = activities_cost > 0;
+
+        (activity_is_valid) ? messageValid(activities_total) : messageInvalid(activities_total);
+
+        return activity_is_valid;
+    }
+    const creditCardValidation = () => {
+        if (payment_options[1].selected && payment_methods[0].hidden === false) {
+            let cc_is_valid = /^\d{13,16}$/.test(card_number.value);
+            let zip_is_valid = /^\d{5}$/.test(zip_code.value);
+            let cvv_is_valid = /^\d{3}$/.test(card_value.value);
+
+            (cc_is_valid) ? messageValid(card_number) : messageInvalid(card_number);
+            (zip_is_valid) ? messageValid(zip_code) : messageInvalid(zip_code);
+            (cvv_is_valid) ? messageValid(card_value) : messageInvalid(card_value);  
 
             return cc_is_valid && zip_is_valid && cvv_is_valid;
         }
+    }
 
+    // "Real-Time Error Message" section
+    name.addEventListener("keyup", nameValidation);
+    email.addEventListener("keyup", emailValidation);
+    activities.addEventListener("change", activityValidation);
+    card_number.addEventListener("keyup", creditCardValidation);
+    zip_code.addEventListener("keyup", creditCardValidation);
+    card_value.addEventListener("keyup", creditCardValidation);
+
+    // "Form Validation" section
+    form.addEventListener("submit", e => {
         if (!nameValidation()) {
             e.preventDefault();
         }
@@ -135,17 +199,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!activityValidation()) {
             e.preventDefault();
         }
-        if (!creditCardValidation() /*&& !payment_methods[0].hidden*/) {
+        if (!creditCardValidation()) {
             e.preventDefault();
-            
-            // if (!payment_methods[1].hidden) {
-            //     form.action = "https://www.paypal.com/us/welcome/signup/#/mobile_conf";
-            //     console.log(form.action);
-            // }
-            // if (!payment_methods[2].hidden) {
-            //     form.action = "https://bitcoin.org/en/buy";
-            //     console.log(form.action);
-            // }
         }
-    })
-})
+    });
+});
