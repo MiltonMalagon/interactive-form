@@ -1,3 +1,4 @@
+// "Document" listener runs script when initial HTML document is loaded.
 document.addEventListener("DOMContentLoaded", () => {
     //** -- INFO SECTION VARIABLES -- **//
     const name = document.querySelector("#name");
@@ -30,6 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
     name.focus();
 
     // "Job Role" section
+
+    /**
+     *  "Job" listener displays/hides "Other job role" text field depending of user selection.
+     * @listens Event change when user selects a job option.
+    **/
     job.addEventListener("change", e => {
         let job_option = e.target.value;
 
@@ -39,6 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
     job_other.hidden = true;
 
     // "T-Shirt Info" section
+    /**
+     *  "Design" listener displays/hides only color options associated with T-Shirt design selection.
+     * @listens Event change when user selects a t-shirt theme.
+    **/
     design.addEventListener("change", e => {
         let theme_option = e.target.value;
 
@@ -53,16 +63,22 @@ document.addEventListener("DOMContentLoaded", () => {
         color_options[0].selected = true;
     });
 
+    // Color property disables "Color" select menu when form first loads.
     color.disabled = true;
 
     ///*** -- ACTIVITY SECTION -- ***///
     // "Register for Activities" section
+    /**
+     *  "Activities" listener adds/subtracts to the total cost according to number of activities selected.
+     * @listens Event change when user selects an activity checkbox.
+    **/
     activities.addEventListener("change", e => {
         let activity = e.target;
         let activity_cost = +activity.dataset.cost;
         let activity_date = activity.dataset.dayAndTime;
 
         // "Conflicting Activities" section
+        // Loop prevents users for selecting activities with the same day and time.
         for (let i = 0; i < checkboxes.length; i++) {
             let checkbox = checkboxes[i];
             let checkbox_date = checkbox.dataset.dayAndTime;
@@ -85,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // "Accessibility" section
+    // Loop shows focus state to users when checkboxes have received focus.
     for (let i = 0; i < checkboxes.length; i++) {
         let checkbox = checkboxes[i];
 
@@ -110,6 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ///*** -- PAYMENT SECTION -- ***///
     // "Payment Info" section
+    /**
+     *  "Payment" listener displays/hides payment section according to payment option selected.
+     * @listens Event change when user selects a payment type.
+    **/
     payment.addEventListener("change", e => {
         let payment_option = e.target.value;
 
@@ -118,14 +139,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Loop shows only "Credit Card" payment section when form first loads.
     for (let i = 0; i < payment_methods.length; i++) {
         (payment_options[1].value === payment_methods[i].id) ? payment_methods[i].hidden = false : payment_methods[i].hidden = true;
     }
 
+    // Payment property makes "Credit Card" as default selected option when form first loads.
     payment_options[1].selected = true;
 
     ///*** -- VALIDATION SECTION -- ***///
     // "Accessibility" section
+    /**
+     *  Displays check-icons if required form fields are filled out correctly.
+     * @param {element} element - HTML element used as reference for its parent/last child elements.
+    **/
     function messageValid(element) {
         const parent_element = element.parentElement;
         const last_child_element = parent_element.lastElementChild;
@@ -135,6 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
         last_child_element.style.display = "none";
     }
 
+    /**
+     *  Displays error icons and notifications if required form fields are empty.
+     * @param {element} element - HTML element used as reference for its parent/last child elements and error messages.
+    **/
     function messageInvalid(element) {
         const parent_element = element.parentElement;
         const last_child_element = parent_element.lastElementChild;        
@@ -166,6 +197,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     // "Conditional Error Message" section
+    /**
+     *  Displays error icons and notifications if required form fields are filled out incorrectly.
+     * @param {element} element - HTML element use as reference for its parent/last child elements and informative messages.
+    **/
     function messageCondition(element) {
         const parent_element = element.parentElement;
         const last_child_element = parent_element.lastElementChild;
@@ -179,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 last_child_element.textContent = `Please provide a valid 'First Last' name`;
                 break;
             case "email":
-                last_child_element.textContent = `A valid 'email@email.com' can help`;
+                last_child_element.textContent = `A valid 'email@email.com' may work`;
                 break;
             case "cc-num":
                 last_child_element.textContent = `Please enter only 13 - 16 numbers`;
@@ -188,14 +223,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 last_child_element.textContent = `Please enter 5 numbers`;
                 break;
             case "cvv":
-                last_child_element.textContent = `Please enter 3 numbers`;
+                last_child_element.textContent = `Enter only 3 numbers`;
                 break;
         }
     }
 
     // Helper functions
+    /**
+     *  Validate all user input/selection data and call function based on field input/selection.
+    **/
     const nameValidation = () => {
-        let name_is_valid = /^[a-zA-Z]+ ?[a-zA-Z]+$/i.test(name.value);
+        let name_is_valid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(name.value);
 
         if (name_is_valid && name.value) {
             messageValid(name);
@@ -288,6 +326,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // "Real-Time Error Message" section
+    /**
+     *  Listeners validate in real-time if user input/selection is valid or invalid.
+     * @listens Event keyup when user type in data.
+     * @listens Event change when user select/diselect activities.
+    **/
     name.addEventListener("keyup", nameValidation);
     email.addEventListener("keyup", emailValidation);
     activities.addEventListener("change", activityValidation);
@@ -296,6 +339,10 @@ document.addEventListener("DOMContentLoaded", () => {
     card_value.addEventListener("keyup", creditCardValidation);
 
     // "Form Validation" section
+    /**
+     *  "Form" listener sends/prevents submission according to user input/selection data.
+     * @listens Event submit when user press "Register" button.
+    **/
     form.addEventListener("submit", e => {
         if (!nameValidation()) {
             e.preventDefault();
