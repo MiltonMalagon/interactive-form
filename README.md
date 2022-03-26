@@ -119,7 +119,7 @@ This section validates required form fields/sections.
     - **"Helper Function"** (*"I'm Going to Pay With"* / *"Card Number"* / *"Zip Code"* / *"CVV"*):
         validates "Credit Card" text fields according to user input and payment option selected
 
-    ---
+    ===
 
     - **"Keyup Event"** (*"Name"*):
         validates in real-time if user enters a valid/invalid name
