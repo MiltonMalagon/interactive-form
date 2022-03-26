@@ -2,7 +2,7 @@
 ## Techdegree Project 3
 
 ### General description
-The "Interactive Form" gets user's data and checks form fields to make sure they contain the correct information. The form automatically updates in real-time if data and selections are valid/invalid and submit data according to user input.
+The "Interactive Form" gets the user's data and checks form fields to make sure they contain the correct information. The form updates in real-time if data and selections are valid/invalid and submit data according to user input serving better user accessibility.
 
 ### Form sections
 The form is developed with four major sections:
