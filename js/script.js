@@ -1,4 +1,7 @@
-// "Document" listener runs script when initial HTML document is loaded.
+/**
+ * "Document" listener runs script once the initial HTML document is loaded.
+ * @listens Event "DOMContentLoaded" when HTML completely loads.
+**/
 document.addEventListener("DOMContentLoaded", () => {
     //** -- INFO SECTION VARIABLES -- **//
     const name = document.querySelector("#name");
@@ -31,10 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
     name.focus();
 
     // "Job Role" section
-
     /**
-     *  "Job" listener displays/hides "Other job role" text field depending of user selection.
-     * @listens Event change when user selects a job option.
+     * "Job" listener displays/hides "Other job role" text field depending on user selection.
+     * @listens Event "change" when user selects a job option.
     **/
     job.addEventListener("change", e => {
         let job_option = e.target.value;
@@ -42,35 +44,38 @@ document.addEventListener("DOMContentLoaded", () => {
         (job_option === "other") ? job_other.hidden = false : job_other.hidden = true;
     });
 
-    job_other.hidden = true;
-
     // "T-Shirt Info" section
     /**
-     *  "Design" listener displays/hides only color options associated with T-Shirt design selection.
-     * @listens Event change when user selects a t-shirt theme.
+     * "Design" listener displays/hides color options, and selects first color option, based on T-Shirt design selection.
+     * "Design" listener enables/disables "Color" select menu.
+     * @listens Event "change" when user selects a t-shirt theme.
     **/
     design.addEventListener("change", e => {
         let theme_option = e.target.value;
 
         for (let i = 0; i < color_options.length; i++) {
             let color_option = color_options[i];
+            let previous_color_option = color_option.previousElementSibling;
             let color_data = color_option.dataset.theme;
 
             (theme_option === color_data) ? color_option.hidden = false : color_option.hidden = true;
+            (!color_option.hidden && previous_color_option.hidden) ? color_option.selected = true : color_option.selected = false;
         }
-
+    
         color.disabled = false;
-        color_options[0].selected = true;
     });
 
-    // Color property disables "Color" select menu when form first loads.
+    // Property hides "Other Job" text field when form first loads.
+    job_other.hidden = true;
+
+    // Property disables "Color" select menu when form first loads.
     color.disabled = true;
 
     ///*** -- ACTIVITY SECTION -- ***///
     // "Register for Activities" section
     /**
-     *  "Activities" listener adds/subtracts to the total cost according to number of activities selected.
-     * @listens Event change when user selects an activity checkbox.
+     * "Activities" listener adds/subtracts to the total cost according to number of activities selected.
+     * @listens Event "change" when user selects an activity checkbox.
     **/
     activities.addEventListener("change", e => {
         let activity = e.target;
@@ -78,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let activity_date = activity.dataset.dayAndTime;
 
         // "Conflicting Activities" section
-        // Loop prevents users for selecting activities with the same day and time.
+        // Loop prevents users from selecting activities with the same day and time.
         for (let i = 0; i < checkboxes.length; i++) {
             let checkbox = checkboxes[i];
             let checkbox_date = checkbox.dataset.dayAndTime;
@@ -105,6 +110,9 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 0; i < checkboxes.length; i++) {
         let checkbox = checkboxes[i];
 
+        /**
+         * "listenEvent" function listens to and applies classes based on the type of event.
+        **/
         function listenEvent() {
             return e => {
                 const event_type = e.type;
@@ -128,8 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ///*** -- PAYMENT SECTION -- ***///
     // "Payment Info" section
     /**
-     *  "Payment" listener displays/hides payment section according to payment option selected.
-     * @listens Event change when user selects a payment type.
+     * "Payment" listener displays/hides payment-method section according to payment-option selected.
+     * @listens Event "change" when user selects a payment type.
     **/
     payment.addEventListener("change", e => {
         let payment_option = e.target.value;
@@ -144,13 +152,13 @@ document.addEventListener("DOMContentLoaded", () => {
         (payment_options[1].value === payment_methods[i].id) ? payment_methods[i].hidden = false : payment_methods[i].hidden = true;
     }
 
-    // Payment property makes "Credit Card" as default selected option when form first loads.
+    // Property selects "Credit Card" as the default option when form first loads.
     payment_options[1].selected = true;
 
     ///*** -- VALIDATION SECTION -- ***///
     // "Accessibility" section
     /**
-     *  Displays check-icons if required form fields are filled out correctly.
+     * "messageValid" function displays check-icons if required form fields are filled out correctly.
      * @param {element} element - HTML element used as reference for its parent/last child elements.
     **/
     function messageValid(element) {
@@ -163,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     *  Displays error icons and notifications if required form fields are empty.
+     * "messageInvalid" function displays error-icons and notifications if required form fields are empty.
      * @param {element} element - HTML element used as reference for its parent/last child elements and error messages.
     **/
     function messageInvalid(element) {
@@ -174,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
         parent_element.classList.remove("valid");
         last_child_element.style.display = "block";
 
+        // Statement displays error-messages for each required form field.
         switch (element.id) {
             case "name":
                 last_child_element.textContent = `Name field cannot be blank`;
@@ -198,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // "Conditional Error Message" section
     /**
-     *  Displays error icons and notifications if required form fields are filled out incorrectly.
+     * "messageCondition" function displays error-icons and notifications if required form fields are filled out incorrectly.
      * @param {element} element - HTML element use as reference for its parent/last child elements and informative messages.
     **/
     function messageCondition(element) {
@@ -209,9 +218,10 @@ document.addEventListener("DOMContentLoaded", () => {
         parent_element.classList.remove("valid");
         last_child_element.style.display = "block";
 
+        // Statement displays notification messages for each required form field.
         switch (element.id) {
             case "name":
-                last_child_element.textContent = `Please provide a valid 'First Last' name`;
+                last_child_element.textContent = `Please provide 'First' and 'Last' name`;
                 break;
             case "email":
                 last_child_element.textContent = `A valid 'email@email.com' may work`;
@@ -227,10 +237,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 break;
         }
     }
-
+    
     // Helper functions
     /**
-     *  Validate all user input/selection data and call function based on field input/selection.
+     * "nameValidation" function validates "Name" text field according to user input.
+     * @returns {boolean} - Boolean value based on name validation.
     **/
     const nameValidation = () => {
         let name_is_valid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(name.value);
@@ -249,6 +260,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return name_is_valid;
     }
+
+    /**
+     * "emailValidation" function validates "Email" text field according to user input.
+     * @returns {boolean} - Boolean value based on email validation.
+    **/
     const emailValidation = () => {
         let email_is_valid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value);
 
@@ -266,6 +282,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return email_is_valid;
     }
+
+    /**
+     * "activityValidation" function validates "Activity" checkboxes according to user selection.
+     * @returns {boolean} - Boolean value based on activity validation.
+    **/
     const activityValidation = () => {
         let activity_is_valid = activities_cost > 0;
 
@@ -279,12 +300,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return activity_is_valid;
     }
+
+    /**
+     * "creditCardValidation" function validates "Credit Card" text fields according to user input.
+     * @returns {boolean} - Boolean value based on "credit card number", "zip code", and "credit card code" validation.
+    **/
     const creditCardValidation = () => {
-        if (payment_options[1].selected && payment_methods[0].hidden === false) {
+        // Conditional validates if and only if "Credit Card" payment method is selected and displayed.
+        if (payment_options[1].selected && !payment_methods[0].hidden) {
             let cc_is_valid = /^\d{13,16}$/.test(card_number.value);
             let zip_is_valid = /^\d{5}$/.test(zip_code.value);
             let cvv_is_valid = /^\d{3}$/.test(card_value.value);
 
+            // Credit card number conditionals
             if (cc_is_valid && card_number.value) {
                 messageValid(card_number);
             }
@@ -297,6 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 messageCondition(card_number);
             }
 
+            // Zip code conditionals
             if (zip_is_valid && zip_code.value) {
                 messageValid(zip_code);
             }
@@ -308,7 +337,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!zip_is_valid && zip_code.value) {
                 messageCondition(zip_code);
             }
-            
+
+            // Credit card code conditionals
             if (cvv_is_valid && card_value.value) {
                 messageValid(card_value);
             }
@@ -327,9 +357,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // "Real-Time Error Message" section
     /**
-     *  Listeners validate in real-time if user input/selection is valid or invalid.
-     * @listens Event keyup when user type in data.
-     * @listens Event change when user select/diselect activities.
+     * Listeners validate in real-time if user input/selection is valid/invalid.
+     * @listens Event "keyup" when user types in data.
+     * @listens Event "change" when user selects/diselects activities.
     **/
     name.addEventListener("keyup", nameValidation);
     email.addEventListener("keyup", emailValidation);
@@ -340,8 +370,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // "Form Validation" section
     /**
-     *  "Form" listener sends/prevents submission according to user input/selection data.
-     * @listens Event submit when user press "Register" button.
+     * "Form" listener sends/prevents submission if user input/selection data is valid/invalid.
+     * @listens Event "submit" when user clicks "Register" button.
     **/
     form.addEventListener("submit", e => {
         if (!nameValidation()) {
