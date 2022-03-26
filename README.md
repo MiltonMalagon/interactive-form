@@ -25,8 +25,6 @@ This section receives basic info and selections.
         displays/hides color options, and selects first color option, based on design selection
         enables/disables "Color" select menu
 
-    ---
-
     - **"Hidden Property"** (*"Other job role"*):
         hides "Other Job Role" text field when form first loads
 
@@ -45,8 +43,6 @@ This section records activity selections.
 
     - **"Change Event"** (*"Register for Activities"*):
         adds/subtracts to the total cost according to number of activities selected
-
-    ---
 
     - **"For Loop"** (*"Register for Activities"*):
         shows focus state to users when checkboxes have received focus
@@ -68,12 +64,8 @@ This section receives credit card data.
     - **"Change Event"** (*"I'm Going to Pay With"*):
         displays/hides payment-method section according to payment-option selected
 
-    ---
-
     - **"For Loop"** (*"Payment Methods"*):
         shows only "Credit Card" payment section when form first loads
-
-    ---
     
     - **"Selected Property"** (*"I'm Going to Pay With"*):
         selects "Credit Card" as the default option when form first loads
@@ -105,8 +97,6 @@ This section validates required form fields/sections.
     
     ###### * Conditional error message feature helps users to change input data if entered incorrectly.
 
-    ---
-
     - **"Helper Function"** (*"Name"*):
         validates "Name" text field according to user input
     
@@ -118,8 +108,6 @@ This section validates required form fields/sections.
 
     - **"Helper Function"** (*"I'm Going to Pay With"* / *"Card Number"* / *"Zip Code"* / *"CVV"*):
         validates "Credit Card" text fields according to user input and payment option selected
-
-    ===
 
     - **"Keyup Event"** (*"Name"*):
         validates in real-time if user enters a valid/invalid name
