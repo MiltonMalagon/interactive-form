@@ -255,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @returns {boolean} - Boolean value based on name validation.
     **/
     const nameValidation = () => {
-        let name_is_valid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(name.value.trim());
+        let name_is_valid = /^[a-zA-Z]+ ?[a-zA-Z]+$/i.test(name.value.trim());
 
         if (name_is_valid && name.value) {
             messageValid(name);
