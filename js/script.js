@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Statement displays notification messages for each required form field.
         switch (element.id) {
             case "name":
-                last_child_element.textContent = `Please provide 'First' and 'Last' name`;
+                last_child_element.textContent = `Please provide 'First' or 'First Last' name`;
                 break;
             case "email":
                 last_child_element.textContent = `A valid 'email@email.com' may work`;
