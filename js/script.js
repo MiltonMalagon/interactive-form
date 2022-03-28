@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.querySelector("#email");
     const card_number = document.querySelector("#cc-num");
     const zip_code = document.querySelector("#zip");
-    const card_value = document.querySelector("#cvv");
+    const card_code = document.querySelector("#cvv");
 
     ///*** -- INFO SECTION -- ***///
     // "Name" section
@@ -43,6 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         (job_option === "other") ? job_other.hidden = false : job_other.hidden = true;
     });
+
+    // Property hides "Other Job" text field when form first loads.
+    job_other.hidden = true;
 
     // "T-Shirt Info" section
     /**
@@ -64,9 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
         color.disabled = false;
     });
-
-    // Property hides "Other Job" text field when form first loads.
-    job_other.hidden = true;
 
     // Property disables "Color" select menu when form first loads.
     color.disabled = true;
@@ -142,18 +142,29 @@ document.addEventListener("DOMContentLoaded", () => {
     payment.addEventListener("change", e => {
         let payment_option = e.target.value;
 
-        for (let i = 0; i < payment_methods.length; i++) { 
-            (payment_option === payment_methods[i].id) ? payment_methods[i].hidden = false : payment_methods[i].hidden = true;
+        for (let i = 0; i < payment_methods.length; i++) {
+            let payment_method = payment_methods[i];
+
+            (payment_option === payment_method.id) ? payment_method.hidden = false : payment_method.hidden = true;
         }
     });
 
-    // Loop shows only "Credit Card" payment section when form first loads.
-    for (let i = 0; i < payment_methods.length; i++) {
-        (payment_options[1].value === payment_methods[i].id) ? payment_methods[i].hidden = false : payment_methods[i].hidden = true;
-    }
+    // Loop selects "Credit Card" option and shows "Credit Card" payment section as default when form first loads.
+    for (let i = 0; i < payment_options.length; i++) {
+        let payment_option = payment_options[i];
+        let previous_payment_option = payment_option.previousElementSibling;
 
-    // Property selects "Credit Card" as the default option when form first loads.
-    payment_options[1].selected = true;
+        if (!payment_option.hidden && previous_payment_option.hidden) {
+            payment_option.selected = true;
+        }
+
+        for (let j = 0; j < payment_methods.length; j++) {
+            let payment_method = payment_methods[j];
+            let previous_payment_method = payment_method.previousElementSibling;
+
+            (payment_method.id && !previous_payment_method.id) ? payment_method.hidden = false : payment_method.hidden = true;
+        } 
+    }
 
     ///*** -- VALIDATION SECTION -- ***///
     // "Accessibility" section
@@ -227,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 last_child_element.textContent = `A valid 'email@email.com' may work`;
                 break;
             case "cc-num":
-                last_child_element.textContent = `Please enter only 13 - 16 numbers`;
+                last_child_element.textContent = `Please enter 13 - 16 numbers`;
                 break;
             case "zip":
                 last_child_element.textContent = `Please enter 5 numbers`;
@@ -244,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @returns {boolean} - Boolean value based on name validation.
     **/
     const nameValidation = () => {
-        let name_is_valid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(name.value);
+        let name_is_valid = /^[a-zA-Z]+\s[a-zA-Z]+$/i.test(name.value.trim());
 
         if (name_is_valid && name.value) {
             messageValid(name);
@@ -266,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @returns {boolean} - Boolean value based on email validation.
     **/
     const emailValidation = () => {
-        let email_is_valid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value);
+        let email_is_valid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value.trim());
 
         if (email_is_valid && email.value) {
             messageValid(email);
@@ -284,8 +295,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * "activityValidation" function validates "Activity" checkboxes according to user selection.
-     * @returns {boolean} - Boolean value based on activity validation.
+     * "activityValidation" function validates the number of activities according to user selection.
+     * @returns {boolean} - Boolean value based on activities validation.
     **/
     const activityValidation = () => {
         let activity_is_valid = activities_cost > 0;
@@ -302,15 +313,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * "creditCardValidation" function validates "Credit Card" text fields according to user input.
-     * @returns {boolean} - Boolean value based on "credit card number", "zip code", and "credit card code" validation.
+     * "cardNumberValidation" function validates "Credit Number" text field according to user input.
+     * @returns {boolean} - Boolean value based on credit card number validation.
     **/
-    const creditCardValidation = () => {
-        // Conditional validates if and only if "Credit Card" payment method is selected and displayed.
+    const cardNumberValidation = () => {
         if (payment_options[1].selected && !payment_methods[0].hidden) {
-            let cc_is_valid = /^\d{13,16}$/.test(card_number.value);
-            let zip_is_valid = /^\d{5}$/.test(zip_code.value);
-            let cvv_is_valid = /^\d{3}$/.test(card_value.value);
+            let cc_is_valid = /^\d{13,16}$/.test(card_number.value.trim());
 
             // Credit card number conditionals
             if (cc_is_valid && card_number.value) {
@@ -325,6 +333,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 messageCondition(card_number);
             }
 
+            return cc_is_valid;
+        }
+    }
+
+    /**
+     * "zipCodeValidation" function validates "Zip Code" text field according to user input.
+     * @returns {boolean} - Boolean value based on zip code validation.
+    **/
+    const zipCodeValidation = () => {
+        if (payment_options[1].selected && !payment_methods[0].hidden) {
+            let zip_is_valid = /^\d{5}$/.test(zip_code.value.trim());
+
             // Zip code conditionals
             if (zip_is_valid && zip_code.value) {
                 messageValid(zip_code);
@@ -338,23 +358,35 @@ document.addEventListener("DOMContentLoaded", () => {
                 messageCondition(zip_code);
             }
 
-            // Credit card code conditionals
-            if (cvv_is_valid && card_value.value) {
-                messageValid(card_value);
-            }
-    
-            if (!cvv_is_valid && !card_value.value) {
-                messageInvalid(card_value);
-            }
-    
-            if (!cvv_is_valid && card_value.value) {
-                messageCondition(card_value);
-            }
-
-            return cc_is_valid && zip_is_valid && cvv_is_valid;
+            return zip_is_valid;
         }
     }
 
+    /**
+     * "zipCodeValidation" function validates "CVV" text field according to user input.
+     * @returns {boolean} - Boolean value based on credit card security code validation.
+    **/
+     const cardCodeValidation = () => {
+        if (payment_options[1].selected && !payment_methods[0].hidden) {
+            let cvv_is_valid = /^\d{3}$/.test(card_code.value.trim());
+
+            // Credit card code conditionals
+            if (cvv_is_valid && card_code.value) {
+                messageValid(card_code);
+            }
+    
+            if (!cvv_is_valid && !card_code.value) {
+                messageInvalid(card_code);
+            }
+    
+            if (!cvv_is_valid && card_code.value) {
+                messageCondition(card_code);
+            }
+
+            return cvv_is_valid;
+        }
+    }
+    
     // "Real-Time Error Message" section
     /**
      * Listeners validate in real-time if user input/selection is valid/invalid.
@@ -364,9 +396,9 @@ document.addEventListener("DOMContentLoaded", () => {
     name.addEventListener("keyup", nameValidation);
     email.addEventListener("keyup", emailValidation);
     activities.addEventListener("change", activityValidation);
-    card_number.addEventListener("keyup", creditCardValidation);
-    zip_code.addEventListener("keyup", creditCardValidation);
-    card_value.addEventListener("keyup", creditCardValidation);
+    card_number.addEventListener("keyup", cardNumberValidation);
+    zip_code.addEventListener("keyup", zipCodeValidation);
+    card_code.addEventListener("keyup", cardCodeValidation);
 
     // "Form Validation" section
     /**
@@ -383,7 +415,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!activityValidation()) {
             e.preventDefault();
         }
-        if (!creditCardValidation()) {
+        if (!cardNumberValidation()) {
+            e.preventDefault();
+        }
+        if (!zipCodeValidation()) {
+            e.preventDefault();
+        }
+        if (!cardCodeValidation()) {
             e.preventDefault();
         }
     });

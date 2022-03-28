@@ -2,7 +2,7 @@
 ## Techdegree Project 3
 
 ### General description
-The "Interactive Form" gets the user's data and checks form fields to make sure they contain the correct information. The form updates in real-time if data and selections are valid/invalid and submit data according to user input serving better user accessibility.
+The "Interactive Form" gets the user's data and checks form fields to make sure they contain the correct information. The form updates in real-time if data and selections are valid/invalid, serving better user accessibility, and submit data according to user input.
 
 ### Form sections
 The form is developed with four major sections:
@@ -54,21 +54,16 @@ This section receives credit card data.
 
 - Interactive fields:
     - "I'm Going to Pay With" select control
-    - "Payment Methods" div elements    
-    - "Card Number" input control
-    - "Zip Code" input control
-    - "CVV" input control
+    - "Payment Options" option elements
+    - "Payment Methods" div elements
 
-- Main code sections (1 event listeners / 1 loop / 1 property):
+- Main code sections (1 event listeners / 1 loop):
 
     - **"Change Event"** (*"I'm Going to Pay With"*):
         displays/hides payment-method section according to payment-option selected
 
-    - **"For Loop"** (*"Payment Methods"*):
-        shows only "Credit Card" payment section when form first loads
-    
-    - **"Selected Property"** (*"I'm Going to Pay With"*):
-        selects "Credit Card" as the default option when form first loads
+    - **"For Loop"** (*"Payment Options"* / *"Payment Methods"*):
+        selects and shows "Credit Card" option and fields as default payment when form first loads
 
 ***
 
@@ -79,12 +74,12 @@ This section validates required form fields/sections.
     - "Name" input control     
     - "Email Address" input control
     - "Register for Activities" checkbox controls
-    - "I'm Going to Pay With" select control   
     - "Card Number" input control
     - "Zip Code" input control
     - "CVV" input control
+    - "Register" button
 
-- Main code sections (3 functions / 4 helper functions / 7 event listeners):
+- Main code sections (3 functions / 6 helper functions / 7 event listeners):
 
     - **"Message Valid Function"** (*All Interactive Fields*):
         displays check-icons if required form fields are filled out correctly
@@ -106,8 +101,14 @@ This section validates required form fields/sections.
     - **"Helper Function"** (*"Register for Activities"*):
         validates "Activity" checkboxes according to user selection
 
-    - **"Helper Function"** (*"I'm Going to Pay With"* / *"Card Number"* / *"Zip Code"* / *"CVV"*):
-        validates "Credit Card" text fields according to user input and payment option selected
+    - **"Helper Function"** (*"Card Number"*):
+        validates "Credit Card" number (not real) according to user input and payment option selected
+
+    - **"Helper Function"** (*"Zip Code"*):
+        validates "Zip" code (not real) according to user input and payment option selected
+        
+    - **"Helper Function"** (*"CVV"*):
+        validates "Credit Card" security code (not real) according to user input and payment option selected
 
     - **"Keyup Event"** (*"Name"*):
         validates in real-time if user enters a valid/invalid name
@@ -128,6 +129,6 @@ This section validates required form fields/sections.
         validates in real-time if user enters a valid/invalid credit card code (not real) of 3 digits
     
     - **"Submit Event"** (*All Interactive Fields*):
-        sends/prevents submission according if user input/selection data are valid/invalid
+        sends/prevents submission default behavior if user input/selection data are valid/invalid
 
-    ###### * Real-time error message feature helps users to change input data instantly.
+    ###### * Real-time error message feature helps users to change input data on the fly.
