@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * "zipCodeValidation" function validates "CVV" text field according to user input.
+     * "cardCodeValidation" function validates "CVV" text field according to user input.
      * @returns {boolean} - Boolean value based on credit card security code validation.
     **/
      const cardCodeValidation = () => {
