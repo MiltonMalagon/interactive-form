@@ -121,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (event_type === "focus") {
                     label.setAttribute("class", "focus");
                 }
-
                 if (event_type === "blur") {
                     label.removeAttribute("class");
                 }
