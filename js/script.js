@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     **/
     function messageInvalid(element) {
         const parent_element = element.parentElement;
-        const last_child_element = parent_element.lastElementChild;        
+        const last_child_element = parent_element.lastElementChild;
 
         parent_element.classList.add("not-valid");
         parent_element.classList.remove("valid");
@@ -260,11 +260,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (name_is_valid && name.value) {
             messageValid(name);
         }
-
         if (!name_is_valid && !name.value) {
             messageInvalid(name);
         }
-
         if (!name_is_valid && name.value) {
             messageCondition(name);
         }
@@ -282,11 +280,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (email_is_valid && email.value) {
             messageValid(email);
         }
-
         if (!email_is_valid && !email.value) {
             messageInvalid(email);
         }
-
         if (!email_is_valid && email.value) {
             messageCondition(email);
         }
@@ -304,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (activity_is_valid) {
             messageValid(activities_total);
         }
-
         if (!activity_is_valid) {
             messageInvalid(activities_total);
         }
@@ -317,18 +312,16 @@ document.addEventListener("DOMContentLoaded", () => {
      * @returns {boolean} - Boolean value based on credit card number validation.
     **/
     const cardNumberValidation = () => {
-        if (payment_options[1].selected && !payment_methods[0].hidden) {
+        if (!payment_methods[0].hidden) {
             let cc_is_valid = /^\d{13,16}$/.test(card_number.value.trim());
 
             // Credit card number conditionals
             if (cc_is_valid && card_number.value) {
                 messageValid(card_number);
             }
-    
             if (!cc_is_valid && !card_number.value) {
                 messageInvalid(card_number);
             }
-    
             if (!cc_is_valid && card_number.value) {
                 messageCondition(card_number);
             }
@@ -342,18 +335,16 @@ document.addEventListener("DOMContentLoaded", () => {
      * @returns {boolean} - Boolean value based on zip code validation.
     **/
     const zipCodeValidation = () => {
-        if (payment_options[1].selected && !payment_methods[0].hidden) {
+        if (!payment_methods[0].hidden) {
             let zip_is_valid = /^\d{5}$/.test(zip_code.value.trim());
 
             // Zip code conditionals
             if (zip_is_valid && zip_code.value) {
                 messageValid(zip_code);
             }
-    
             if (!zip_is_valid && !zip_code.value) {
                 messageInvalid(zip_code);
             }
-    
             if (!zip_is_valid && zip_code.value) {
                 messageCondition(zip_code);
             }
@@ -367,18 +358,16 @@ document.addEventListener("DOMContentLoaded", () => {
      * @returns {boolean} - Boolean value based on credit card security code validation.
     **/
      const cardCodeValidation = () => {
-        if (payment_options[1].selected && !payment_methods[0].hidden) {
+        if (!payment_methods[0].hidden) {
             let cvv_is_valid = /^\d{3}$/.test(card_code.value.trim());
 
             // Credit card code conditionals
             if (cvv_is_valid && card_code.value) {
                 messageValid(card_code);
             }
-    
             if (!cvv_is_valid && !card_code.value) {
                 messageInvalid(card_code);
             }
-    
             if (!cvv_is_valid && card_code.value) {
                 messageCondition(card_code);
             }
@@ -415,13 +404,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!activityValidation()) {
             e.preventDefault();
         }
-        if (!cardNumberValidation()) {
+        if (!cardNumberValidation() && payment_options[1].selected) {
             e.preventDefault();
         }
-        if (!zipCodeValidation()) {
+        if (!zipCodeValidation() && payment_options[1].selected) {
             e.preventDefault();
         }
-        if (!cardCodeValidation()) {
+        if (!cardCodeValidation() && payment_options[1].selected) {
             e.preventDefault();
         }
     });
