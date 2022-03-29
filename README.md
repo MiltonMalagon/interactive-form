@@ -77,7 +77,6 @@ This section validates required form fields/sections.
     - "Card Number" input control
     - "Zip Code" input control
     - "CVV" input control
-    - "Register" button
 
 - Main code sections (3 functions / 6 helper functions / 7 event listeners):
 
@@ -128,7 +127,7 @@ This section validates required form fields/sections.
     - **"Keyup Event"** (*"CVV"*):
         validates in real-time if user enters a valid/invalid credit card code (not real) of 3 digits
     
-    - **"Submit Event"** (*All Interactive Fields*):
-        sends/prevents submission default behavior if user input/selection data are valid/invalid
+    - **"Submit Event"** (*Form*):
+        sends/prevents form submission default behavior if user input/selection data are valid/invalid
 
     ###### * Real-time error message feature helps users to change input data on the fly.
